@@ -1,9 +1,8 @@
-ifndef USING_SEM
 CFLAGS = -Wall
-else
-CFLAGS = -Wall -DUSING_SEM
-endif
 LDFLAGS = 
+ifeq ($(MAKECMDGOALS), good)
+CFLAGS += -DUSING_SEM
+endif
 
 target = _main
 srcs = main.c debug.c
@@ -17,6 +16,8 @@ all: $(target)
 $(target): $(objs) $(headers) FORCE
 	$(CC) -o $@ $(objs) $(LDFLAGS)
 	@-rm -f *.o
+
+good: all
 
 $(objs):%.o:%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<

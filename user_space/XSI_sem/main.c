@@ -10,7 +10,7 @@
 #include "debug.h"
 
 
-#define MSGKEY 1
+#define SEMKEY 1
 
 void print0(size_t count)
 {
@@ -38,10 +38,10 @@ int semid_init(int *semid)
 {
     int sid;
 
-    sid = semget(MSGKEY, 0, 0666);
+    sid = semget(SEMKEY, 0, 0666);
     if (sid < 0)
     {
-        sid = semget(MSGKEY, 1, IPC_CREAT| IPC_EXCL | 0666);
+        sid = semget(SEMKEY, 1, IPC_CREAT| IPC_EXCL | 0666);
         if (sid < 0)
         {
             perror("semget: ");
