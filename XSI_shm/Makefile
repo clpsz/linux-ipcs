@@ -1,8 +1,4 @@
-ifndef USING_SEM
 CFLAGS = -Wall
-else
-CFLAGS = -Wall -DUSING_SEM
-endif
 LDFLAGS = 
 
 target = _main
