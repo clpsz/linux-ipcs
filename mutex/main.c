@@ -7,10 +7,6 @@
 #include "debug.h"
 
 
-#define SEMKEY 1
-
-
-
 
 #if defined(USING_MUTEX)
 pthread_mutex_t mutex;
