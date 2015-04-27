@@ -31,7 +31,7 @@ void parent()
     }
 
     addr = shmat(shmid, 0, 0);
-    if ((int)addr == -1)
+    if (addr == (void *)-1)
     {
         perror("shmat");
         return;
