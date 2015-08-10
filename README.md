@@ -1,4 +1,4 @@
-# linux-RPCs
+# linux-IPCs
 Linux进程间通信方式汇总
 
 # 目前已包含的方式
