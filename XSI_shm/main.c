@@ -9,14 +9,9 @@
 #include <sys/shm.h>
 #include "debug.h"
 
-#define TEXT_SZ 2048
-struct shared_use_st
-{
-	int written_by_you;
-	char some_text[TEXT_SZ];
-};
 
 #define SHMKEY 1
+
 
 void parent()
 {
@@ -44,7 +39,7 @@ void parent()
 
     sprintf(addr, "I am parent");
 
-    sleep(2);
+    usleep(500);
     ret = shmctl(shmid, IPC_RMID, NULL);
     if (ret < 0)
     {
@@ -61,11 +56,8 @@ void child()
     shmid = shmget(SHMKEY, 0, 0666);
     if (shmid < 0)
     {
-        shmid = shmget(SHMKEY, 4096, IPC_CREAT | IPC_EXCL | 0666);
-        if (shmid < 0){
-			perror("child shmget");
-			return;
-		}
+        perror("child shmget");
+        return;
     }
     
     addr = shmat(shmid, 0, 0);
@@ -91,7 +83,6 @@ int main(void)
     }
     else
     { /* child */
-		sleep(1);
         child();
     }
 
