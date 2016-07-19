@@ -12,6 +12,19 @@
 
 #define SEMKEY 1
 
+#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
+    /* union semun is defined by including <sys/sem.h> */
+#else
+    /* according to X/OPEN we have to define it ourselves */
+    union semun {
+        int val;                    /* value for SETVAL */
+        struct semid_ds *buf;       /* buffer for IPC_STAT, IPC_SET */
+        unsigned short int *array;  /* array for GETALL, SETALL */
+        struct seminfo *__buf;      /* buffer for IPC_INFO */
+    };
+#endif
+
+
 void print0(size_t count)
 {
     int i;
@@ -19,6 +32,7 @@ void print0(size_t count)
     for (i = 0; i < count; i++)
     {
         fprintf(stderr, "0");
+		usleep(10);
     }
     fprintf(stderr, "\n");
 }
@@ -30,6 +44,7 @@ void print1(size_t count)
     for (i = 0; i < count; i++)
     {
         fprintf(stderr, "1");
+		usleep(10);
     }
     fprintf(stderr, "\n");
 }
@@ -108,14 +123,26 @@ void parent()
         exit(-1);
     }
 
-    sem_add(semid, 1);
+	union semun sem_union;
+	sem_union.val = 1;
+	if (semctl(semid, 0, SETVAL, sem_union) == -1) 
+		exit(-1);
 
-    while (1)
+    //sem_add(semid, 1);
+
+    //while (1)
     {
         sem_sub(semid, 1);
         print0(100);
         sem_add(semid, 1);
     }
+
+	sleep(5);
+	
+	if (semctl(semid, 0, IPC_RMID, sem_union) == -1)
+     	exit(-1);
+
+	
 }
 
 void child()
@@ -124,7 +151,7 @@ void child()
 
     semid_init(&semid);
 
-    while (1)
+    //while (1)
     {
         sem_sub(semid, 1);
         print1(100);
