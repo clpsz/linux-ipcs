@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include "debug.h"
 
 #define MAXLINE 256
@@ -11,6 +12,7 @@ int main(void)
     int fd[2];
     pid_t pid;
     char line[MAXLINE];
+	int status;
 
     if (pipe(fd) < 0)
     {
@@ -26,6 +28,7 @@ int main(void)
     { /* parent */
         close(fd[0]);
         write(fd[1], "hello pipe\n", 12);
+		wait(&status);
     }
     else { /* child */
         close(fd[1]);
