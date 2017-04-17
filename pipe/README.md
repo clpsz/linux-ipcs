@@ -1,11 +1,11 @@
-#使用方法
+# 使用方法
 ```
 cd pipe/
 make
 ./_main
 ```
 
-#描述
+# 描述
 管道是linux系统中最常用的进程间通信方式，我们平常在命令行中使用如下命令：
 ```
 cat /tmp/xxx.txt | grep abc
