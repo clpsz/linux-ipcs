@@ -39,7 +39,7 @@ void parent()
 
     sprintf(addr, "I am parent");
 
-    usleep(500);
+    sleep(1); //wait child to get shm
     ret = shmctl(shmid, IPC_RMID, NULL);
     if (ret < 0)
     {
