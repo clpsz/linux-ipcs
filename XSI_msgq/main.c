@@ -14,7 +14,8 @@
 
 typedef struct
 {
-    int type;
+    long type;
+    //int type;//
     char buf[512];
 } MSGBUF;
 
@@ -34,10 +35,10 @@ void parent()
     }
     usleep(100); // wait child entering receiving status
 
-    msg.type = 0;
+    msg.type = 10;//the type can't be 0,should >0;
     strcpy(msg.buf, "I am parent");
 
-    ret = msgsnd(msgid, &msg, sizeof(msg), IPC_NOWAIT); 
+    ret = msgsnd(msgid, &msg, sizeof(msg.buf), IPC_NOWAIT); 
     if (ret < 0)
     {
         perror("msgsnd: ");
@@ -64,7 +65,7 @@ void child()
         perror("msgget: ");
     }
 
-    ret = msgrcv(msgid, &msg, sizeof(msg), 0, 0);
+    ret = msgrcv(msgid, &msg, sizeof(msg.buf), 10, 0);
     if (ret < 0)
     {
         perror("msgrcv: ");
